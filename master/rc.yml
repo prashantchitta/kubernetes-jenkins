@@ -1,0 +1,36 @@
+---
+  kind: "ReplicationController"
+  spec: 
+    replicas: 1
+    template: 
+      spec: 
+        containers: 
+          - 
+            image: "csanchez/jenkins-kubernetes"
+            volumeMounts: 
+              - 
+                mountPath: "/var/jenkins_home"
+                name: "kube-jenkins-vol"
+            name: "kube-jenkins"
+            ports: 
+              - 
+                containerPort: 8080
+                hostPort: 8080
+              - 
+                containerPort: 50000
+                hostPort: 50000
+        volumes: 
+          - 
+            name: "kube-jenkins-vol"
+            persistentVolumeClaim: 
+              claimName: "kube-jenkins-vol-claim"
+      metadata: 
+        labels: 
+          app: "kube-jenkins"
+        name: "kube-jenkins"
+    selector: 
+      app: "kube-jenkins"
+  apiVersion: "v1"
+  metadata: 
+    name: "kube-jenkins"
+
